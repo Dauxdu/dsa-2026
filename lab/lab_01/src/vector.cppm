@@ -9,10 +9,28 @@ private:
     std::size_t size_{0};
     T *data_;
 
+    // 5
+    void CheckIndex(std::size_t index) const
+    {
+        if (index >= size_)
+        {
+            throw std::out_of_range("Vector index is out of range");
+        }
+    }
+
+    // 5
+    void CheckSameSize(const Vector &other) const
+    {
+        if (size_ != other.size_)
+        {
+            throw std::invalid_argument("Vector sizes do not match");
+        }
+    }
+
+public:
     // 3
     static constexpr double kEpsilon{1e-9}; /// 0.0000000001
 
-public:
     explicit Vector(std::size_t size, T fill_value) : size_(size), data_(new T[size])
     {
         for (std::size_t i{0}; i < size_; ++i)
@@ -21,11 +39,12 @@ public:
         }
     }
 
+    // explicit Vector(std::size_t size, T min_value, T max_value);
+
+    Vector() = delete;
+
     // 2
-    ~Vector()
-    {
-        delete[] data_;
-    }
+    ~Vector() { delete[] data_; }
 
     // 2
     Vector(const Vector &other) : size_(other.size_), data_(new T[other.size_])
@@ -48,16 +67,16 @@ public:
     {
         if (this != &other)
         {
-            delete[] data_;
-            size_ = other.size_;
-            data_ = new T[size_];
-            for (std::size_t i{0}; i < size_; ++i)
-            {
-                data_[i] = other.data_[i];
-            }
+            return *this;
         }
 
-        return *this;
+        delete[] data_;
+        size_ = other.size_;
+        data_ = new T[size_];
+        for (std::size_t i{0}; i < size_; ++i)
+        {
+            data_[i] = other.data_[i];
+        }
     }
 
     // 2
