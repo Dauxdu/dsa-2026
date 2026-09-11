@@ -9,6 +9,9 @@ private:
     std::size_t size_{0};
     T *data_;
 
+    // 3
+    static constexpr double kEpsilon{1e-9}; /// 0.0000000001
+
 public:
     explicit Vector(std::size_t size, T fill_value) : size_(size), data_(new T[size])
     {
@@ -70,5 +73,30 @@ public:
         }
 
         return *this;
+    }
+
+    // 3
+    bool operator==(const Vector &other) const
+    {
+        if (size_ != other.size_)
+        {
+            return false;
+        }
+
+        for (std::size_t i{0}; i < size_; ++i)
+        {
+            if (std::abs(data_[i] - other.data_[i]) > kEpsilon)
+            {
+                return false;
+            }
+        }
+
+        return true;
+    }
+
+    // 3
+    bool operator!=(const Vector &other) const
+    {
+        return !(*this == other);
     }
 };
