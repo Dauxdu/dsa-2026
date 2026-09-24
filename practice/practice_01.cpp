@@ -36,14 +36,9 @@ const char *find_sub_str(const char *str, const char *substr)
     if (!str || !substr) { return nullptr; }
     if (!*substr) { return str; }
 
-    std::size_t sub_len = 0;
-    while (substr[sub_len]) { sub_len++; }
-
     const char *ptr = str;
-    while (*ptr)
+    while (*ptr) 
     {
-        const char *end_check = ptr + sub_len - 1;
-        
         const char *ps = ptr;
         const char *pm = substr;
         
