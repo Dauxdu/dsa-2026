@@ -1,6 +1,6 @@
 cmake_minimum_required(VERSION 4.2.0)
 
-set(CMAKE_CXX_STANDARD 26)
+set(CMAKE_CXX_STANDARD 23)
 set(CMAKE_CXX_MODULE_STD ON)
 
 # https://github.com/Kitware/CMake/blob/master/Help/dev/experimental.rst
@@ -19,3 +19,5 @@ if(CMAKE_CXX_COMPILER_ID STREQUAL "Clang" OR CMAKE_CXX_COMPILER_ID STREQUAL "GNU
 elseif(CMAKE_CXX_COMPILER_ID STREQUAL "MSVC")
     add_compile_options(/utf-8 /W4)
 endif()
+
+add_subdirectory(lab/lab_01)
