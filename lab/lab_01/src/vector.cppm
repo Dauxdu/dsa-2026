@@ -6,8 +6,9 @@ export template <typename T>
 class Vector
 {
 private:
+    // 2
     std::size_t size_{0};
-    T *data_;
+    T *data_{nullptr};
 
     // 5
     void CheckIndex(std::size_t index) const
@@ -27,21 +28,32 @@ private:
         }
     }
 
+    // 5
+    void CheckDivisor(const T &scalar) const
+    {
+        if (scalar == T{0})
+        {
+            throw std::invalid_argument("Division by zero");
+        }
+    }
+
 public:
     // 3
-    static constexpr double kEpsilon{1e-9}; /// 0.0000000001
+    static constexpr double kEpsilon{0.00001};
 
-    explicit Vector(std::size_t size, T fill_value) : size_(size), data_(new T[size])
+    Vector(std::size_t size, const T &fill_value) : size_{size}, data_{new T[size]}
+    {
+        std::fill_n(data_, size_, fill_value);
+    }
+
+    // 7
+    Vector(std::size_t size, const T &min_value, const T &max_value) : size_{size}, data_{new T[size]}
     {
         for (std::size_t i{0}; i < size_; ++i)
         {
             data_[i] = fill_value;
         }
     }
-
-    // explicit Vector(std::size_t size, T min_value, T max_value);
-
-    Vector() = delete;
 
     // 2
     ~Vector() { delete[] data_; }
@@ -56,7 +68,7 @@ public:
     }
 
     // 2
-    Vector(Vector &&other) noexcept : size_(other.size_), data_(other.data_)
+    Vector(Vector &&other) noexcept : size_{other.size_}, data_{other.data_}
     {
         other.size_ = 0;
         other.data_ = nullptr;
