@@ -111,10 +111,7 @@ public:
     }
 
     // 2
-    ~Vector() { delete[] data_; }
-
-    // 2
-    Vector(const Vector &other) : size_(other.size_), data_(new T[other.size_])
+    Vector(const Vector &other) : size_{other.size_}, data_{new T[other.size_]}
     {
         for (std::size_t i{0}; i < size_; ++i)
         {
@@ -162,6 +159,112 @@ public:
         }
 
         return *this;
+    }
+
+    // 2
+    ~Vector() { delete[] data_; }
+
+    std::size_t Size() const { return size_; }
+
+    // 5
+    T &operator[](std::size_t index)
+    {
+        CheckIndex(index);
+        return data_[index];
+    }
+
+    // 5
+    const T &operator[](std::size_t index) const
+    {
+        CheckIndex(index);
+        return data_[index];
+    }
+
+    // 8
+    Vector &operator+=(const Vector &other)
+    {
+        CheckSameSize(other);
+        for (std::size_t i{0}; i < size_; ++i)
+        {
+            data_[i] += other.data_[i];
+        }
+        return *this;
+    }
+
+    Vector &operator-=(const Vector &other)
+    {
+        CheckSameSize(other);
+        for (std::size_t i{0}; i < size_; ++i)
+        {
+            data_[i] -= other.data_[i];
+        }
+        return *this;
+    }
+
+    Vector &operator*=(const T &scalar)
+    {
+        for (std::size_t i{0}; i < size_; ++i)
+        {
+            data_[i] *= scalar;
+        }
+        return *this;
+    }
+
+    Vector &operator/=(const T &scalar)
+    {
+        CheckDivisor(scalar);
+        for (std::size_t i{0}; i < size_; ++i)
+        {
+            data_[i] /= scalar;
+        }
+        return *this;
+    }
+
+    // 8
+    Vector operator+(const Vector &other) const
+    {
+        Vector result{*this};
+        result += other;
+        return result;
+    }
+
+    Vector operator-(const Vector &other) const
+    {
+        Vector result{*this};
+        result -= other;
+        return result;
+    }
+
+    Vector operator*(const T &scalar) const
+    {
+        Vector result{*this};
+        result *= scalar;
+        return result;
+    }
+
+    Vector operator/(const T &scalar) const
+    {
+        Vector result{*this};
+        result /= scalar;
+        return result;
+    }
+
+    // Скалярное произведение
+    T operator*(const Vector &other) const
+    {
+        CheckSameSize(other);
+        T result{};
+        for (std::size_t i{0}; i < size_; ++i)
+        {
+            result += data_[i] * Conjugate(other.data_[i]);
+        }
+        return result;
+    }
+
+    // 8
+    auto Norm() const
+    {
+        return std::sqrt(std::abs(*this * *this));
     }
 
     // 3
