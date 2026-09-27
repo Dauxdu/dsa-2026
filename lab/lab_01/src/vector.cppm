@@ -2,6 +2,49 @@ export module vector;
 
 import std;
 
+template <typename T>
+T Conjugate(const T &value)
+{
+    return value;
+}
+
+template <typename T>
+std::complex<T> Conjugate(const std::complex<T> &value)
+{
+    return std::conj(value);
+}
+
+// 7
+int RandomValue(std::mt19937 &engine, int min_value, int max_value)
+{
+    if (min_value > max_value)
+    {
+        throw std::invalid_argument("Lower bound is greater than upper bound");
+    }
+    std::uniform_int_distribution<int> distribution(min_value, max_value);
+    return distribution(engine);
+}
+
+template <typename T>
+T RandomValue(std::mt19937 &engine, T min_value, T max_value)
+{
+    if (min_value > max_value)
+    {
+        throw std::invalid_argument("Lower bound is greater than upper bound");
+    }
+    std::uniform_real_distribution<T> distribution(min_value, max_value);
+    return distribution(engine);
+}
+
+template <typename T>
+std::complex<T> RandomValue(std::mt19937 &engine, const std::complex<T> &min_value,
+                            const std::complex<T> &max_value)
+{
+    return {RandomValue(engine, min_value.real(), max_value.real()),
+            RandomValue(engine, min_value.imag(), max_value.imag())};
+}
+
+// 11
 export template <typename T>
 class Vector
 {
