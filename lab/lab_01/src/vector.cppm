@@ -86,15 +86,27 @@ public:
 
     Vector(std::size_t size, const T &fill_value) : size_{size}, data_{new T[size]}
     {
-        std::fill_n(data_, size_, fill_value);
+        for (std::size_t i{0}; i < size_; ++i)
+        {
+            data_[i] = fill_value;
+        }
     }
 
     // 7
     Vector(std::size_t size, const T &min_value, const T &max_value) : size_{size}, data_{new T[size]}
     {
-        for (std::size_t i{0}; i < size_; ++i)
+        try
         {
-            data_[i] = fill_value;
+            std::mt19937 engine{std::random_device{}()};
+            for (std::size_t i{0}; i < size_; ++i)
+            {
+                data_[i] = RandomValue(engine, min_value, max_value);
+            }
+        }
+        catch (...)
+        {
+            delete[] data_;
+            throw;
         }
     }
 
@@ -122,16 +134,19 @@ public:
     {
         if (this != &other)
         {
-            return *this;
+            T *new_data{new T[other.size_]};
+
+            for (std::size_t i{0}; i < other.size_; ++i)
+            {
+                new_data[i] = other.data_[i];
+            }
+
+            delete[] data_;
+            data_ = new_data;
+            size_ = other.size_;
         }
 
-        delete[] data_;
-        size_ = other.size_;
-        data_ = new T[size_];
-        for (std::size_t i{0}; i < size_; ++i)
-        {
-            data_[i] = other.data_[i];
-        }
+        return *this;
     }
 
     // 2
@@ -164,13 +179,26 @@ public:
                 return false;
             }
         }
-
         return true;
     }
 
     // 3
-    bool operator!=(const Vector &other) const
+    bool operator!=(const Vector &other) const { return !(*this == other); }
+
+    friend Vector operator*(const T &scalar, const Vector &vector) { return vector * scalar; }
+
+    // 4 и 6
+    friend std::ostream &operator<<(std::ostream &stream, const Vector &vector)
     {
-        return !(*this == other);
+        stream << '(';
+        for (std::size_t i{0}; i < vector.size_; ++i)
+        {
+            if (i != 0)
+            {
+                stream << ", ";
+            }
+            stream << vector.data_[i];
+        }
+        return stream << ')';
     }
 };
