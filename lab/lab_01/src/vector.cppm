@@ -86,9 +86,17 @@ public:
 
     Vector(std::size_t size, const T &fill_value) : size_{size}, data_{new T[size]}
     {
-        for (std::size_t i{0}; i < size_; ++i)
+        try
         {
-            data_[i] = fill_value;
+            for (std::size_t i{0}; i < size_; ++i)
+            {
+                data_[i] = fill_value;
+            }
+        }
+        catch (...)
+        {
+            delete[] data_;
+            throw;
         }
     }
 
