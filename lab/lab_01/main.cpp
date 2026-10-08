@@ -106,52 +106,17 @@ void Demo(const std::string &type_name, const T &min_value, const T &max_value)
 // 9
 void SolveTriangleTask()
 {
-    const std::size_t max_dimension{1000};
-
     std::cout << "===== Task: triangle area =====\n";
 
     Vector<int> example_a(2, 0);
     Vector<int> example_b(2, 0);
     example_a[0] = 3;
     example_b[1] = 4;
-    std::cout << "a = " << example_a << ", b = " << example_b
-              << ", S = " << TriangleArea(example_a, example_b) << " (expected 6)\n";
+    std::cout << "a = " << example_a << ", b = " << example_b << ", S = " << TriangleArea(example_a, example_b) << "\n";
 
     const Vector<double> random_a(3, -10.0, 10.0);
     const Vector<double> random_b(3, -10.0, 10.0);
-    std::cout << "a = " << random_a << ", b = " << random_b
-              << ", S = " << TriangleArea(random_a, random_b) << '\n';
-
-    std::cout << "Enter dimension (1.." << max_dimension << "): ";
-    std::size_t dimension{0};
-    if (!(std::cin >> dimension) || dimension == 0 || dimension > max_dimension)
-    {
-        std::cout << "Invalid dimension\n";
-        return;
-    }
-
-    Vector<double> side_a(dimension, 0.0);
-    Vector<double> side_b(dimension, 0.0);
-
-    std::cout << "Enter " << dimension << " coordinates of a: ";
-    for (std::size_t i{0}; i < dimension; ++i)
-    {
-        std::cin >> side_a[i];
-    }
-    std::cout << "Enter " << dimension << " coordinates of b: ";
-    for (std::size_t i{0}; i < dimension; ++i)
-    {
-        std::cin >> side_b[i];
-    }
-
-    if (!std::cin)
-    {
-        std::cout << "Coordinates must be numbers\n";
-        return;
-    }
-
-    std::cout << "a = " << side_a << ", b = " << side_b
-              << ", S = " << TriangleArea(side_a, side_b) << '\n';
+    std::cout << "a = " << random_a << ", b = " << random_b << ", S = " << TriangleArea(random_a, random_b) << '\n';
 }
 
 int main()
