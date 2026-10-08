@@ -93,6 +93,14 @@ private:
         }
     }
 
+    void Copy(const Vector &other)
+    {
+        for (std::size_t i{0}; i < size_; ++i)
+        {
+            data_[i] = other.data_[i];
+        }
+    }
+
 public:
     using RealType = typename RealType<T>::Type;
 
@@ -136,10 +144,7 @@ public:
     // 2
     Vector(const Vector &other) : data_{new T[other.size_]}, size_{other.size_}
     {
-        for (std::size_t i{0}; i < size_; ++i)
-        {
-            data_[i] = other.data_[i];
-        }
+        Copy(other);
     }
 
     // 2
@@ -154,16 +159,8 @@ public:
     {
         if (this != &other)
         {
-            T *new_data{new T[other.size_]};
-
-            for (std::size_t i{0}; i < other.size_; ++i)
-            {
-                new_data[i] = other.data_[i];
-            }
-
-            delete[] data_;
-            data_ = new_data;
-            size_ = other.size_;
+            Vector temp(other);
+            *this = std::move(temp);
         }
 
         return *this;
@@ -190,14 +187,18 @@ public:
     std::size_t Size() const noexcept { return size_; }
 
     // 5
-    T &operator[](std::size_t index)
+    T &operator[](std::size_t index) noexcept { return data_[index]; }
+
+    const T &operator[](std::size_t index) const noexcept { return data_[index]; }
+
+    // 5
+    T &At(std::size_t index)
     {
         CheckIndex(index);
         return data_[index];
     }
 
-    // 5
-    const T &operator[](std::size_t index) const
+    const T &At(std::size_t index) const
     {
         CheckIndex(index);
         return data_[index];
