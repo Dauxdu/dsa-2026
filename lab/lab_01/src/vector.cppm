@@ -59,12 +59,12 @@ struct RealType<std::complex<T>>
 
 // 11
 export template <typename T>
-class Vector
+class Vector final
 {
 private:
     // 2
-    std::size_t size_{0};
     T *data_{nullptr};
+    std::size_t size_{0};
 
     // 5
     void CheckIndex(std::size_t index) const
@@ -99,7 +99,7 @@ public:
     // 3
     static constexpr RealType kEpsilon{std::numeric_limits<RealType>::epsilon()};
 
-    Vector(std::size_t size, const T &fill_value) : size_{size}, data_{new T[size]}
+    Vector(std::size_t size, const T &fill_value) : data_{new T[size]}, size_{size}
     {
         try
         {
@@ -116,7 +116,7 @@ public:
     }
 
     // 7
-    Vector(std::size_t size, const T &min_value, const T &max_value) : size_{size}, data_{new T[size]}
+    Vector(std::size_t size, const T &min_value, const T &max_value) : data_{new T[size]}, size_{size}
     {
         try
         {
@@ -134,7 +134,7 @@ public:
     }
 
     // 2
-    Vector(const Vector &other) : size_{other.size_}, data_{new T[other.size_]}
+    Vector(const Vector &other) : data_{new T[other.size_]}, size_{other.size_}
     {
         for (std::size_t i{0}; i < size_; ++i)
         {
@@ -143,10 +143,10 @@ public:
     }
 
     // 2
-    Vector(Vector &&other) noexcept : size_{other.size_}, data_{other.data_}
+    Vector(Vector &&other) noexcept : data_{other.data_}, size_{other.size_}
     {
-        other.size_ = 0;
         other.data_ = nullptr;
+        other.size_ = 0;
     }
 
     // 2
@@ -175,10 +175,10 @@ public:
         if (this != &other)
         {
             delete[] data_;
-            size_ = other.size_;
             data_ = other.data_;
-            other.size_ = 0;
+            size_ = other.size_;
             other.data_ = nullptr;
+            other.size_ = 0;
         }
 
         return *this;
@@ -187,7 +187,7 @@ public:
     // 2
     ~Vector() { delete[] data_; }
 
-    std::size_t Size() const { return size_; }
+    std::size_t Size() const noexcept { return size_; }
 
     // 5
     T &operator[](std::size_t index)
