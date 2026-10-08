@@ -44,6 +44,19 @@ std::complex<T> RandomValue(std::mt19937 &engine, const std::complex<T> &min_val
             RandomValue(engine, min_value.imag(), max_value.imag())};
 }
 
+// 3
+template <typename T>
+struct RealType
+{
+    using Type = T;
+};
+
+template <typename T>
+struct RealType<std::complex<T>>
+{
+    using Type = T;
+};
+
 // 11
 export template <typename T>
 class Vector
@@ -81,8 +94,10 @@ private:
     }
 
 public:
+    using RealType = typename RealType<T>::Type;
+
     // 3
-    static constexpr double kEpsilon{0.00001};
+    static constexpr RealType kEpsilon{std::numeric_limits<RealType>::epsilon()};
 
     Vector(std::size_t size, const T &fill_value) : size_{size}, data_{new T[size]}
     {
