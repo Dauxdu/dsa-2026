@@ -119,6 +119,8 @@ public:
         catch (...)
         {
             delete[] data_;
+            data_ = nullptr;
+            size_ = 0;
             throw;
         }
     }
@@ -137,6 +139,8 @@ public:
         catch (...)
         {
             delete[] data_;
+            data_ = nullptr;
+            size_ = 0;
             throw;
         }
     }
