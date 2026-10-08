@@ -186,6 +186,12 @@ public:
 
     std::size_t Size() const noexcept { return size_; }
 
+    // 8
+    auto Norm() const
+    {
+        return std::sqrt(std::abs(*this * *this));
+    }
+
     // 5
     T &operator[](std::size_t index) noexcept { return data_[index]; }
 
@@ -245,63 +251,61 @@ public:
     }
 
     // 8
-    Vector operator+(const Vector &other) const
+    friend Vector operator+(Vector lhs, const Vector &rhs)
     {
-        Vector result{*this};
-        result += other;
-        return result;
+        lhs += rhs;
+        return lhs;
     }
 
-    Vector operator-(const Vector &other) const
+    friend Vector operator-(Vector lhs, const Vector &rhs)
     {
-        Vector result{*this};
-        result -= other;
-        return result;
+        lhs -= rhs;
+        return lhs;
     }
 
-    Vector operator*(const T &scalar) const
+    friend Vector operator*(Vector lhs, const T &scalar)
     {
-        Vector result{*this};
-        result *= scalar;
-        return result;
+        lhs *= scalar;
+        return lhs;
     }
 
-    Vector operator/(const T &scalar) const
+    friend Vector operator*(const T &scalar, Vector rhs)
     {
-        Vector result{*this};
-        result /= scalar;
-        return result;
+        rhs *= scalar;
+        return rhs;
+    }
+
+    friend Vector operator/(Vector lhs, const T &scalar)
+    {
+        lhs /= scalar;
+        return lhs;
     }
 
     // Скалярное произведение
-    T operator*(const Vector &other) const
+    friend T operator*(const Vector &lhs, const Vector &rhs)
     {
-        CheckSameSize(other);
+        lhs.CheckSameSize(rhs);
         T result{};
-        for (std::size_t i{0}; i < size_; ++i)
+        for (std::size_t i{0}; i < lhs.size_; ++i)
         {
-            result += data_[i] * Conjugate(other.data_[i]);
+            result += lhs.data_[i] * Conjugate(rhs.data_[i]);
         }
         return result;
     }
 
-    // 8
-    auto Norm() const
-    {
-        return std::sqrt(std::abs(*this * *this));
-    }
-
     // 3
-    bool operator==(const Vector &other) const
+    friend bool operator==(const Vector &lhs, const Vector &rhs)
     {
-        if (size_ != other.size_)
+        if (lhs.size_ != rhs.size_)
         {
             return false;
         }
 
-        for (std::size_t i{0}; i < size_; ++i)
+        for (std::size_t i{0}; i < lhs.size_; ++i)
         {
-            if (std::abs(data_[i] - other.data_[i]) > kEpsilon)
+            const auto difference{std::abs(lhs.data_[i] - rhs.data_[i])};
+            const auto scale{std::max(std::abs(lhs.data_[i]), std::abs(rhs.data_[i]))};
+            if (difference > kEpsilon * scale)
             {
                 return false;
             }
@@ -310,9 +314,7 @@ public:
     }
 
     // 3
-    bool operator!=(const Vector &other) const { return !(*this == other); }
-
-    friend Vector operator*(const T &scalar, const Vector &vector) { return vector * scalar; }
+    friend bool operator!=(const Vector &lhs, const Vector &rhs) { return !(lhs == rhs); }
 
     // 4 и 6
     friend std::ostream &operator<<(std::ostream &stream, const Vector &vector)
