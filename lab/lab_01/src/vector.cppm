@@ -40,6 +40,10 @@ template <typename T>
 std::complex<T> RandomValue(std::mt19937 &engine, const std::complex<T> &min_value,
                             const std::complex<T> &max_value)
 {
+    if (min_value > max_value)
+    {
+        throw std::invalid_argument("Lower bound is greater than upper bound");
+    }
     return {RandomValue(engine, min_value.real(), max_value.real()),
             RandomValue(engine, min_value.imag(), max_value.imag())};
 }
@@ -93,14 +97,6 @@ private:
         }
     }
 
-    void Copy(const Vector &other)
-    {
-        for (std::size_t i{0}; i < size_; ++i)
-        {
-            data_[i] = other.data_[i];
-        }
-    }
-
 public:
     using RealType = typename RealType<T>::Type;
 
@@ -109,19 +105,9 @@ public:
 
     Vector(std::size_t size, const T &fill_value) : data_{new T[size]}, size_{size}
     {
-        try
+        for (std::size_t i{0}; i < size_; ++i)
         {
-            for (std::size_t i{0}; i < size_; ++i)
-            {
-                data_[i] = fill_value;
-            }
-        }
-        catch (...)
-        {
-            delete[] data_;
-            data_ = nullptr;
-            size_ = 0;
-            throw;
+            data_[i] = fill_value;
         }
     }
 
@@ -148,7 +134,10 @@ public:
     // 2
     Vector(const Vector &other) : data_{new T[other.size_]}, size_{other.size_}
     {
-        Copy(other);
+        for (std::size_t i{0}; i < size_; ++i)
+        {
+            data_[i] = other.data_[i];
+        }
     }
 
     // 2
