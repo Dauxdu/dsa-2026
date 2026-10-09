@@ -87,7 +87,7 @@ private:
     // 5
     void CheckDivisor(const T &scalar) const
     {
-        if (scalar == T{0})
+        if (std::abs(scalar) <= kEpsilon)
         {
             throw std::invalid_argument("Division by zero");
         }
