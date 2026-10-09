@@ -40,10 +40,6 @@ template <typename T>
 std::complex<T> RandomValue(std::mt19937 &engine, const std::complex<T> &min_value,
                             const std::complex<T> &max_value)
 {
-    if (min_value > max_value)
-    {
-        throw std::invalid_argument("Lower bound is greater than upper bound");
-    }
     return {RandomValue(engine, min_value.real(), max_value.real()),
             RandomValue(engine, min_value.imag(), max_value.imag())};
 }
