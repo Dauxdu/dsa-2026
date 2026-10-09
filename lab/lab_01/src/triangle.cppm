@@ -13,10 +13,5 @@ auto TriangleArea(const Vector<T> &side_a, const Vector<T> &side_b)
     const auto dot{std::abs(side_a * side_b)};
     auto radicand{norm_a * norm_a * norm_b * norm_b - dot * dot};
 
-    if (radicand < 0)
-    {
-        radicand = 0;
-    }
-
     return std::sqrt(radicand) / 2;
 }
