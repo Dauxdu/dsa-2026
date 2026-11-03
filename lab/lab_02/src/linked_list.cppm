@@ -9,14 +9,6 @@ struct Node
     Node *next{nullptr};
 };
 
-void CheckRange(const auto &min_value, const auto &max_value)
-{
-    if (min_value > max_value)
-    {
-        throw std::invalid_argument("Lower bound is greater than upper bound");
-    }
-}
-
 template <typename T>
 T RandomValue(std::mt19937 &engine, const T &min_value, const T &max_value)
 {
@@ -47,6 +39,14 @@ private:
         }
     }
 
+    static void CheckRange(const T &min_value, const T &max_value)
+    {
+        if (min_value > max_value)
+        {
+            throw std::invalid_argument("Lower bound is greater than upper bound");
+        }
+    }
+
     Node<T> *NodeAt(std::size_t index) const
     {
         CheckNotEmpty();
@@ -55,7 +55,6 @@ private:
         {
             return tail_;
         }
-
         Node<T> *node{tail_->next};
         for (std::size_t i{0}; i < index; ++i)
         {
@@ -87,7 +86,6 @@ private:
         {
             return;
         }
-
         if (tail_ != nullptr)
         {
             Node<T> *head{tail_->next};
@@ -153,9 +151,22 @@ public:
         other.size_ = 0;
     }
 
-    LinkedList &operator=(LinkedList other) noexcept
+    LinkedList &operator=(const LinkedList &other)
     {
-        Swap(other);
+        if (this != &other)
+        {
+            LinkedList copy(other);
+            Swap(copy);
+        }
+        return *this;
+    }
+
+    LinkedList &operator=(LinkedList &&other) noexcept
+    {
+        if (this != &other)
+        {
+            Swap(other);
+        }
         return *this;
     }
 
@@ -254,7 +265,6 @@ public:
                 previous = current;
             }
         }
-
         if (size_ == 0)
         {
             tail_ = nullptr;
