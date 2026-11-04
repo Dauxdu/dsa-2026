@@ -3,7 +3,7 @@ export module sorted_merge;
 import std;
 import linked_list;
 
-export LinkedList<int> MakeSortedList(std::size_t size, int max_step, unsigned int seed)
+export [[nodiscard]] LinkedList<int> MakeSortedList(std::size_t size, int max_step, unsigned int seed)
 {
     LinkedList<int> steps(size, 0, max_step, seed);
     LinkedList<int> result;
@@ -17,7 +17,7 @@ export LinkedList<int> MakeSortedList(std::size_t size, int max_step, unsigned i
 }
 
 export template <typename T>
-LinkedList<T> MergeUnique(LinkedList<T> lhs, LinkedList<T> rhs)
+[[nodiscard]] LinkedList<T> MergeUnique(LinkedList<T> lhs, LinkedList<T> rhs)
 {
     LinkedList<T> result;
     while (!lhs.Empty() || !rhs.Empty())

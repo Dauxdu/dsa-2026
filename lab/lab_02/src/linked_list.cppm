@@ -170,9 +170,9 @@ public:
         return *this;
     }
 
-    std::size_t Size() const noexcept { return size_; }
+    [[nodiscard]] std::size_t Size() const noexcept { return size_; }
 
-    bool Empty() const noexcept { return size_ == 0; }
+    [[nodiscard]] bool Empty() const noexcept { return size_ == 0; }
 
     void Clear() noexcept
     {
@@ -203,7 +203,7 @@ public:
         Swap(copy);
     }
 
-    T PopHead()
+    [[nodiscard]] T PopHead()
     {
         CheckNotEmpty();
         Node<T> *head{tail_->next};
@@ -221,7 +221,7 @@ public:
         return value;
     }
 
-    T PopTail()
+    [[nodiscard]] T PopTail()
     {
         CheckNotEmpty();
         Node<T> *old_tail{tail_};
@@ -241,7 +241,7 @@ public:
         return value;
     }
 
-    std::size_t DeleteNode(const T &value)
+    [[nodiscard]] std::size_t DeleteNode(const T &value)
     {
         std::size_t removed{0};
         Node<T> *previous{tail_};
