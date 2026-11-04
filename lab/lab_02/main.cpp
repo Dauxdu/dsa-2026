@@ -68,9 +68,9 @@ void DemoExceptions(const T &min_value, const T &max_value)
     TryRun("empty[0]", [&empty]
            { std::cout << empty[0] << '\n'; });
     TryRun("empty.PopHead()", [&empty]
-           { empty.PopHead(); });
+           { std::ignore = empty.PopHead(); });
     TryRun("empty.PopTail()", [&empty]
-           { empty.PopTail(); });
+           { std::ignore = empty.PopTail(); });
     TryRun("random list with min > max", [min_value, max_value]
            { std::cout << LinkedList<T>(3, max_value, min_value, SEED) << '\n'; });
 }
@@ -94,14 +94,9 @@ void SolveMergeTask()
     std::cout << "merged with empty = " << MergeUnique(a, empty) << '\n';
     LinkedList<int> unsorted(a);
     unsorted.PushHead(100);
-    try
-    {
-        std::cout << MergeUnique(unsorted, b) << '\n';
-    }
-    catch (const std::invalid_argument &error)
-    {
-        std::cout << "merge unsorted " << unsorted << ": " << error.what() << '\n';
-    }
+    std::cout << "merge unsorted " << unsorted << '\n';
+    TryRun("merge unsorted", [&unsorted, &b]
+           { std::cout << MergeUnique(unsorted, b) << '\n'; });
 }
 
 int main()
