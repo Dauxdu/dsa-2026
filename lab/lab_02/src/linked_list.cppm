@@ -280,9 +280,11 @@ public:
         return removed;
     }
 
-    T &operator[](std::size_t index) { return NodeAt(index)->value; }
-
-    const T &operator[](std::size_t index) const { return NodeAt(index)->value; }
+    template <typename Self>
+    decltype(auto) operator[](this Self &&self, std::size_t index)
+    {
+        return std::forward_like<Self>(self.NodeAt(index)->value);
+    }
 
     friend std::ostream &operator<<(std::ostream &stream, const LinkedList &list)
     {
