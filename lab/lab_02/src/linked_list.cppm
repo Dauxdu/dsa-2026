@@ -10,6 +10,14 @@ struct Node
 };
 
 template <typename T>
+concept CharacterType =
+    std::same_as<T, char> || std::same_as<T, signed char> || std::same_as<T, unsigned char> ||
+    std::same_as<T, wchar_t> || std::same_as<T, char8_t> || std::same_as<T, char16_t> || std::same_as<T, char32_t>;
+
+template <typename T>
+concept ListValue = std::floating_point<T> || (std::integral<T> && !std::same_as<T, bool> && !CharacterType<T>);
+
+template <typename T>
 T RandomValue(std::mt19937 &engine, const T &min_value, const T &max_value)
 {
     if constexpr (std::is_integral_v<T>)
@@ -24,7 +32,7 @@ T RandomValue(std::mt19937 &engine, const T &min_value, const T &max_value)
     }
 }
 
-export template <typename T>
+export template <ListValue T>
 class LinkedList final
 {
 private:
