@@ -2,7 +2,7 @@ import std;
 import linked_list;
 import sorted_merge;
 
-constexpr unsigned int SEED{2026};
+constexpr unsigned int SEED{608};
 
 template <typename T>
 void DemoOperations(const T &min_value, const T &max_value)
