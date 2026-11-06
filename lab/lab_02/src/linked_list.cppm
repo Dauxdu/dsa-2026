@@ -206,7 +206,7 @@ public:
         Swap(copy);
     }
 
-    [[nodiscard]] T PopHead()
+    T PopHead()
     {
         CheckNotEmpty();
         Node<T> *head{tail_->next};
@@ -224,7 +224,7 @@ public:
         return value;
     }
 
-    [[nodiscard]] T PopTail()
+    T PopTail()
     {
         CheckNotEmpty();
         Node<T> *old_tail{tail_};
@@ -244,7 +244,7 @@ public:
         return value;
     }
 
-    [[nodiscard]] std::size_t DeleteNode(const T &value)
+    std::size_t DeleteNode(const T &value)
     {
         std::size_t removed{0};
         Node<T> *previous{tail_};
