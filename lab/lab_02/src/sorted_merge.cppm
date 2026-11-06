@@ -3,9 +3,9 @@ export module sorted_merge;
 import std;
 import linked_list;
 
-export [[nodiscard]] LinkedList<int> MakeSortedList(std::size_t size, int max_step, unsigned int seed)
+export [[nodiscard]] LinkedList<int> MakeSortedList(std::size_t size, int min_value, int max_value, unsigned int seed)
 {
-    LinkedList<int> steps(size, 0, max_step, seed);
+    LinkedList<int> steps(size, min_value, max_value, seed);
     LinkedList<int> result;
     int value{0};
     while (!steps.Empty())

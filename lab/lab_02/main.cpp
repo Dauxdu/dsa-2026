@@ -87,8 +87,8 @@ void Demo(const std::string_view type_name, const T &min_value, const T &max_val
 void SolveMergeTask()
 {
     std::cout << "===== Task 8: merge sorted lists without duplicates =====\n";
-    const LinkedList<int> a{MakeSortedList(10, 3, SEED)};
-    const LinkedList<int> b{MakeSortedList(8, 4, SEED + 1)};
+    const LinkedList<int> a{MakeSortedList(10, 0, 3, SEED)};
+    const LinkedList<int> b{MakeSortedList(8, 0, 4, SEED + 1)};
     std::cout << "a = " << a << "\nb = " << b << "\nmerged = " << MergeUnique(a, b) << '\n';
     LinkedList<int> empty;
     std::cout << "merged with empty = " << MergeUnique(a, empty) << '\n';
